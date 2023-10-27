@@ -1,0 +1,101 @@
+---
+import Checkout from "@/components/Checkout.astro";
+import Layout from "@/layouts/Layout.astro";
+import { ARS } from "@/lib/currency";
+import { widths } from "@/lib/sizes";
+import { generatePath } from "@/lib/utils";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import { icons } from "feather-icons";
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const {
+  slug,
+  data: { title, description, price, img },
+} = product;
+const { Content } = await product.render();
+
+const link = new URL("https://api.whatsapp.com/send");
+link.searchParams.append("phone", import.meta.env.PUBLIC_PHONE);
+link.searchParams.append(
+  "text",
+  `Hola, quiero realizar el siguiente pedido.
+
+Producto: ${title}
+Precio: ${ARS.format(price)}`,
+);
+---
+
+<Layout
+  title={title}
+  description={description}
+  route={generatePath(`productos/${slug}`)}
+  img={img}
+>
+  <!-- mobile -->
+  <section class="container space-y-8 py-8 md:hidden">
+    <div class="space-y-4">
+      <a
+        href={generatePath("#productos")}
+        class="flex items-center gap-2 text-text"
+      >
+        <Fragment set:html={icons["arrow-left-circle"].toSvg()} />
+        <span>Inicio</span>
+      </a>
+      <h1 class="text-2xl md:text-3xl">{title}</h1>
+      <Image
+        src={img}
+        alt={title}
+        format="avif"
+        quality="mid"
+        loading="eager"
+        widths={[...widths, img.width]}
+        sizes="(min-width: 680px) 608px, calc(94.44vw - 15px)"
+        class="rounded bg-primary"
+      />
+      <p class="text-3xl font-bold">
+        {ARS.format(price)}
+      </p>
+
+      <Content />
+    </div>
+
+    <Checkout href={link} />
+  </section>
+
+  <!-- desktop -->
+  <section class="container hidden max-w-4xl grid-cols-5 gap-4 py-8 md:grid">
+    <div class="col-span-3 space-y-4">
+      <Image
+        src={img}
+        alt={title}
+        format="avif"
+        quality="mid"
+        loading="eager"
+        widths={[...widths, img.width]}
+        sizes="(min-width: 980px) 512px, calc(38.89vw + 139px)"
+        class="rounded bg-primary"
+      />
+      <Content />
+    </div>
+
+    <div class="col-span-2 space-y-8">
+      <div class="space-y-2">
+        <h1 class="text-2xl md:text-3xl">{title}</h1>
+        <p class="text-3xl font-bold">
+          {ARS.format(price)}
+        </p>
+      </div>
+
+      <Checkout href={link} />
+    </div>
+  </section>
+</Layout>

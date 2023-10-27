@@ -1,0 +1,114 @@
+---
+import "@fontsource-variable/karla";
+import "@fontsource/merriweather/400.css";
+import "@fontsource/merriweather/700.css";
+
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import { generatePath } from "@/lib/utils";
+import { getImage } from "astro:assets";
+
+interface Props {
+  title: string;
+  description: string;
+  route: string;
+  img: ImageMetadata;
+}
+
+const { title, description, route, img } = Astro.props;
+
+const keywords = [
+  "aromaterapia",
+  "atomizador",
+  "difusor",
+  "jabón",
+  "sahumerios",
+  "vela",
+  "velas",
+  "artesanal",
+];
+
+const base = "https://martinstanicio.github.io/";
+const url = new URL(route, base);
+
+const optimizedImg = await getImage({ src: img });
+const metaImage = new URL(optimizedImg.src, base);
+---
+
+<!doctype html>
+<html lang="es" class="overflow-y-scroll">
+  <head>
+    <title>{title} | DG Deco</title>
+    <meta name="title" content={`${title} | DG Deco`} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(",")} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={`${title} | DG Deco`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={metaImage} />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={url} />
+    <meta property="twitter:title" content={`${title} | DG Deco`} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={metaImage} />
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="sitemap" href={generatePath("/sitemap-index.xml")} />
+
+    <link rel="icon" type="image/x-icon" href={generatePath("/favicon.ico")} />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={generatePath("/apple-touch-icon.png")}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href={generatePath("/favicon-32x32.png")}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href={generatePath("/favicon-16x16.png")}
+    />
+    <link rel="manifest" href={generatePath("/site.webmanifest")} />
+    <link
+      rel="mask-icon"
+      href={generatePath("/safari-pinned-tab.svg")}
+      color="#9c6644"
+    />
+    <meta
+      name="msapplication-config"
+      content={generatePath("/browserconfig.xml")}
+    />
+    <meta
+      name="msapplication-TileImage"
+      content={generatePath("/mstile-150x150.png")}
+    />
+    <meta name="msapplication-TileColor" content="#9c6644" />
+  </head>
+  <body
+    class="flex min-h-screen flex-col bg-background font-serif leading-relaxed text-text"
+  >
+    <Header class="sticky top-0 z-10" />
+    <div class="flex-grow">
+      <slot />
+    </div>
+    <Footer />
+    <style is:global>
+      h1,
+      h2,
+      h3 {
+        @apply font-sans;
+      }
+    </style>
+  </body>
+</html>

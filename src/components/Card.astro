@@ -1,0 +1,42 @@
+---
+import { ARS } from "@/lib/currency";
+import { widths } from "@/lib/sizes";
+import { Image } from "astro:assets";
+import Button from "./Button.astro";
+
+interface Props {
+  title: string;
+  href: string;
+  img: ImageMetadata;
+  price: number;
+  slug: string;
+}
+
+const { title, href, img, price } = Astro.props;
+---
+
+<article class="flex flex-col overflow-hidden rounded bg-secondary">
+  <Image
+    src={img}
+    alt={title}
+    class="aspect-[4/3] bg-primary object-cover object-center"
+    format="avif"
+    quality="mid"
+    widths={[...widths, img.width]}
+    sizes="(min-width: 1040px) 277px, (min-width: 780px) 352px, (min-width: 640px) 288px, calc(100vw - 32px)"
+  />
+  <div class="flex flex-grow flex-col justify-between gap-4 p-4">
+    <div>
+      <h3 class="text-primary-dark text-xl font-bold">{title}</h3>
+      <div class="text-text/80">
+        <slot />
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <Button href={href}>Comprar</Button>
+      <span class="text-lg font-bold">
+        {ARS.format(price)}
+      </span>
+    </div>
+  </div>
+</article>

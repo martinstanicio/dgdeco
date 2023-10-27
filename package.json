@@ -1,0 +1,32 @@
+{
+  "name": "dgdeco",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier . --write"
+  },
+  "dependencies": {
+    "@astrojs/prefetch": "^0.4.0",
+    "@astrojs/sitemap": "^3.0.0",
+    "@astrojs/tailwind": "^5.0.0",
+    "@fontsource-variable/karla": "^5.0.17",
+    "@fontsource/merriweather": "^5.0.8",
+    "astro": "^3.3.2",
+    "feather-icons": "^4.29.1",
+    "sharp": "^0.32.6",
+    "tailwindcss": "^3.0.24"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.2.1",
+    "@types/feather-icons": "^4.29.1",
+    "prettier": "^3.0.3",
+    "prettier-plugin-astro": "^0.12.0",
+    "prettier-plugin-astro-organize-imports": "^0.3.2",
+    "prettier-plugin-tailwindcss": "^0.5.4"
+  }
+}

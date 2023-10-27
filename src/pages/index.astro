@@ -1,0 +1,41 @@
+---
+import img from "@/assets/hero.jpg";
+import Card from "@/components/Card.astro";
+import Hero from "@/components/Hero.astro";
+import Layout from "@/layouts/Layout.astro";
+import { generatePath } from "@/lib/utils";
+import { getCollection } from "astro:content";
+
+const products = await getCollection("products");
+---
+
+<Layout
+  title="Decorá con clase, decorá con DG Deco"
+  description="Descubre la relajación y la tranquilidad a través de nuestros productos de aromaterapia. Sumérgete en un mundo de fragancias y armonía con DG Deco."
+  route={generatePath("/")}
+  img={img}
+>
+  <Hero />
+  <section class="container space-y-4 py-8">
+    <h2 class="scroll-mt-24 text-center text-2xl md:text-3xl" id="productos">
+      Nuestros productos
+    </h2>
+    <div
+      class="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {
+        products.map(({ data: { title, description, price, img }, slug }) => (
+          <Card
+            title={title}
+            img={img}
+            href={generatePath(`/productos/${slug}`)}
+            price={price}
+            slug={slug}
+          >
+            <p>{description}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
